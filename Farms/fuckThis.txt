@@ -1,0 +1,9 @@
+$${
+do();
+key(use);
+wait(60000ms);
+key(use);
+wait(1800000ms);
+$$<botFeeder.txt>;
+loop;
+}$$

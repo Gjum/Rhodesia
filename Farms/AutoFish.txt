@@ -1,0 +1,46 @@
+$${
+//pds0303 autoFisher
+//Fill chest to your right with fishing poles
+//Make sure LAST slot in chest has a rod
+//rodid tracks the slot# in the DC when slot#=53 forces disconnect
+#rodid=0;
+pick("fishing_rod");
+look(270,6);
+wait("1000ms");
+//Fishing
+do();
+pick("fishing_rod");
+look(270,6);
+key(use);
+wait(300ms);
+//Grab new rod
+if(%DURABILITY%<1)
+wait("1000ms");
+//Drop rod behind you
+look(90,0);
+wait("10t");
+key(drop);
+wait("10t")
+look(0,70);
+wait("10t");
+key(use);
+wait("20t");
+getslot("fishing_rod",#rodid);
+slotclick(%#rodid%,true,true);
+log(%#rodid%);
+wait("20t");
+gui();
+endif()
+//Check Food
+if(%HUNGER% < 17)
+do();
+slot(9);
+key(use);
+until(%HUNGER% > 19);
+endif();
+//Logout if last rod is used
+if(%#rodid%==53)
+disconnect();
+endif();
+loop();
+}$$

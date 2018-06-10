@@ -1,0 +1,98 @@
+//Property of ICE Road Trucking Development
+//Food goes in slot 9
+//Set do-loop time
+//Each Pick is unique
+//ef5h2 = 200 (untested)
+//ef5   = 50 (Runs out of string)
+//ef4h2 = 240 (untested)
+//ef4   = 70
+
+do();
+//Checks Food
+    if(%HUNGER% < 17)
+    slot(9);
+        do();
+            key(use);
+            until(%HUNGER% > 19);
+        endif();
+//Flicks Lever
+    look(0,0);
+    wait(50ms);
+    key(use);
+    wait(50ms);
+    look(180,0);
+    wait(100ms);
+do(5);
+//Breaks Obby
+    slot(1);
+    wait(200ms);
+    look(180,0);
+    do(70);
+        key(attack);
+    loop();
+    wait(100ms);
+//Check dura
+    if(%DURABILITY%<10);
+        ECHO(/exit);
+        wait(300ms);
+        ECHO(/msg);
+        wait(300ms);
+        ECHO(/g R-III);
+        wait(300ms);
+        ECHO(ObbyBot - Durability forced logout);
+        wait(1000ms);
+        disconnect();
+    endif();
+//Gets String
+    look(272,0);
+    wait(50ms);
+    key(use);
+loop();
+//Flicks Lever
+    look(0,0);
+    wait(50ms);
+    key(use);
+    wait(50ms);
+    look(180,0);
+    wait(100ms);
+//Places String
+    keydown(sneak);
+    pick(string);
+    wait(10ms);
+    look(180,7);
+    key(use);
+    wait(5ms);
+    look(180,9);
+    key(use);
+    wait(5ms);
+    look(180,10);
+    key(use);
+    wait(5ms);
+    look(180,15);
+    key(use);
+    wait(5ms);
+    look(180,30);
+    key(use);
+    keyup(sneak);
+    wait(5000ms);
+//Check string
+    slot(8);
+    if(%STACKSIZE%<8);
+    ECHO(/exit);
+    wait(300ms);
+    ECHO(/msg);
+    wait(300ms);
+    ECHO(/g R-III);
+    wait(300ms);
+    ECHO(ObbyBot - Out of string. Waiting...);
+	//Wait 1 hours for string to build up
+    wait(3600000ms);
+	ECHO(ObbyBot - Resuming)
+	//Grab stack of string
+	look(272,0);
+	do(64);
+    wait(1000ms);
+    key(use);
+	loop();
+    endif();
+loop();

@@ -1,0 +1,90 @@
+//Property of ICE Road Trucking Development
+//Put food in slot 9
+//Clear slots 1-8
+//Put pickaxe/axe/sword in offhand to prevent food in offhand
+#north = 8548
+#south = 8637
+#west = -9595
+slot(1);
+do();
+    do();
+        look(0,90);
+        #z = %ZPOS% - 1
+        do()
+            look(0,90);
+            keydown(forward);
+            until(%#z% = %ZPOS%);
+        keyup(forward);
+        if(%HUNGER% < 17);
+            do();
+                slot(9);
+                key(use);
+                until(%HUNGER% > 19);
+            endif();
+        pick(wheat_seeds);
+        key(attack);
+        wait(20ms);
+        key(use);
+        until(%ZPOS% = %#north%);
+    look(0,0);
+    wait(20ms);
+    gui(inv);
+    do(36);
+        getslot(wheat,#idvar);
+        wait(1ms);
+        slotclick(%#idvar%);
+        slotclick(-999);
+    loop();
+    gui();
+    #x = %XPOS% - 1
+    do()
+        look(0,90);
+        keydown(left);
+        until(%#x% = %XPOS%);
+    keyup(left);
+    do();
+        look(0,90);
+        pick(wheat_seeds);
+        key(attack);
+        wait(20ms);
+        key(use);
+        #z = %ZPOS% + 1
+        do()
+            look(0,90);
+            keydown(back);
+            until(%#z% = %ZPOS%);
+        keyup(back);
+        if(%HUNGER% < 17)
+            do();
+                slot(9);
+                key(use);
+                until(%HUNGER% > 19);
+            endif();
+        until(%ZPOS% = %#south% + 1);
+    look(180,0);
+    gui(inv);
+    do(27);
+        getslot(wheat_seeds,#idvar);
+        wait(1ms);
+            if(%#idvar% < 36);
+                slotclick(%#idvar%);
+                slotclick(-999);
+                endif();
+        loop();
+    gui();
+    wait(20ms);
+    #x = %XPOS% - 1
+    do()
+        look(0,90);
+        keydown(left);
+        until(%#x% = %XPOS%);
+    keyup(left);
+    until(%XPOS% < %#west%);
+if(%HUNGER% < 17);
+    do();
+        slot(9);
+        key(use);
+        until(%HUNGER% > 19);
+    endif();
+wait(5000ms);
+echo(/logout);

@@ -1,0 +1,119 @@
+/*Pds0303
+*04/20/2018 | Last Edited 04/22/18
+*Dependencies: BotFeeder.txt | moveWest.txt | moveEast.txt | moveNorth.txt
+* Pickaxe: 50
+* Axe: 20
+* Efficiencies untested
+*/ This script harvests the Rhodesia melon farm on a loop until tool durability triggers disconnect (Use Silk Touch)
+do();
+
+
+do(12)
+//Begin first row
+$$<botFeeder.txt>; //Check food at the end of every row
+slot(1);
+$$<moveWest.txt>;
+do(62);
+    look(90,15);
+    do(15); //Change this to adjust pick-axe speed
+        key(attack);
+    loop();
+
+    $$<moveEast.txt>;
+loop();
+    
+    //Finishing row
+do(4);
+    $$<moveEast.txt>;
+loop();
+//Despense hotbar into water
+look(90,0);
+slot(2);
+do(64);
+    key(drop);
+    wait(3ms);
+loop();
+slot(3);
+do(64);
+    key(drop);
+    wait(3ms);
+loop();
+slot(4);
+do(64);
+    key(drop);
+    wait(3ms);
+loop();
+
+
+do(1);
+    $$<moveNorth.txt>;
+loop();
+//Check pick dura
+slot(1);
+    if(%DURABILITY% < 70);
+        disconnect();
+        wait(15000ms);
+    endif()
+
+
+//Begin second row
+$$<botFeeder.txt>;
+slot(1);
+
+$$<moveEast.txt>;
+do(62);
+    look(270,15);
+    do(15); //Change this to adjust pick-axe speed
+        key(attack);
+    loop();
+
+    $$<moveWest.txt>;
+loop();
+    
+    //Finishing second row
+do(4);
+#x = %XPOS% - 1
+
+do()
+    look(0,90);
+    keydown(left);
+    until(%#x% = %XPOS%);
+keyup(left);
+
+
+    wait(10ms);
+loop();
+do(4);
+    #z = %ZPOS% - 1
+
+do()
+    look(0,90);
+    keydown(forward);
+    until(%#z% = %ZPOS%);
+keyup(forward);
+
+
+    wait(10ms);
+loop();
+
+
+//Check pick dura
+slot(1);
+    if(%DURABILITY% < 70);
+        disconnect();
+        wait(15000ms);
+    endif()
+
+loop();
+
+do(60);
+    #z = %ZPOS% + 1
+
+do()
+    look(0,90);
+    keydown(back);
+    until(%#z% = %ZPOS%);
+keyup(back);
+loop();
+
+loop();

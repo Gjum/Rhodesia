@@ -1,0 +1,42 @@
+$${
+//Property of ICE Road Trucking Development
+//put food in slot 9
+//clear slots 1-8
+//put pickaxe/axe/sword in offhand to prevent food in offhand
+#north = 8630
+#south = 8719
+#west = -9222
+gui(inventory);
+wait(4000ms);
+gui();
+do();
+    do();
+        #xlock = %XPOS%;
+        look(0,90);
+        $$<botStabalizer.txt>;
+        $$<moveNorth.txt>;
+        $$<botFeeder.txt>;
+        pick(carrot);
+        key(attack);
+        wait(10ms);
+        key(use);
+        until(%ZPOS% = %#north%);
+    look(0,0);
+    wait(20ms);
+    $$<clearInv.txt>;
+    $$<moveEast.txt>;
+    do();
+        #xlock = %XPOS%;
+        look(0,90);
+        pick(carrot);
+        key(attack);
+        wait(10ms);
+        key(use);
+        $$<botStabalizer.txt>;
+        $$<moveSouth.txt>;
+        $$<botFeeder.txt>;
+        until(%ZPOS% = %#south% + 1);
+    $$<moveEast.txt>;
+until(%XPOS% > %#west%);
+$$<botFeeder.txt>;
+}$$

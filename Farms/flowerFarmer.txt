@@ -1,0 +1,190 @@
+$${
+//Pds0303
+//04/26/18
+//flowers and shit
+
+slot(1)
+do(32)
+    //North
+    look(0,55);
+    wait(10ms);
+    key(use);
+    wait(200ms);
+
+    //South
+    look(180,55);
+    wait(10ms);
+    key(use);
+    wait(200ms);
+
+    //Button
+    wait(400ms);
+    look(0,90);
+    key(use);
+    wait(40t);
+    key(use);
+    wait(46t);
+loop();
+wait(2000ms);
+slot(2)
+do(32)
+    //North
+    look(0,55);
+    wait(10ms);
+    key(use);
+    wait(200ms);
+
+    //South
+    look(180,55);
+    wait(10ms);
+    key(use);
+    wait(200ms);
+
+    //Button
+    wait(400ms);
+    look(0,90);
+    key(use);
+    wait(40t);
+    key(use);
+    wait(46t);
+loop();
+wait(2000ms);
+slot(3)
+do(32)
+    //North
+    look(0,55);
+    wait(10ms);
+    key(use);
+    wait(200ms);
+
+    //South
+    look(180,55);
+    wait(10ms);
+    key(use);
+    wait(200ms);
+
+    //Button
+    wait(400ms);
+    look(0,90);
+    key(use);
+    wait(40t);
+    key(use);
+    wait(46t);
+loop();
+wait(2000ms);
+slot(4)
+do(32)
+    //North
+    look(0,55);
+    wait(10ms);
+    key(use);
+    wait(200ms);
+
+    //South
+    look(180,55);
+    wait(10ms);
+    key(use);
+    wait(200ms);
+
+    //Button
+    wait(400ms);
+    look(0,90);
+    key(use);
+    wait(40t);
+    key(use);
+    wait(46t);
+loop();
+wait(2000ms);
+slot(5)
+do(32)
+    //North
+    look(0,55);
+    wait(10ms);
+    key(use);
+    wait(200ms);
+
+    //South
+    look(180,55);
+    wait(10ms);
+    key(use);
+    wait(200ms);
+
+    //Button
+    wait(400ms);
+    look(0,90);
+    key(use);
+    wait(40t);
+    key(use);
+    wait(46t);
+loop();
+wait(2000ms);
+slot(6)
+do(32)
+    //North
+    look(0,55);
+    wait(10ms);
+    key(use);
+    wait(200ms);
+
+    //South
+    look(180,55);
+    wait(10ms);
+    key(use);
+    wait(200ms);
+
+    //Button
+    wait(400ms);
+    look(0,90);
+    key(use);
+    wait(40t);
+    key(use);
+    wait(46t);
+loop();
+wait(2000ms);
+slot(7)
+do(32)
+    //North
+    look(0,55);
+    wait(10ms);
+    key(use);
+    wait(200ms);
+
+    //South
+    look(180,55);
+    wait(10ms);
+    key(use);
+    wait(200ms);
+
+    //Button
+    wait(400ms);
+    look(0,90);
+    key(use);
+    wait(40t);
+    key(use);
+    wait(46t);
+loop();
+wait(2000ms);
+slot(8)
+do(32)
+    //North
+    look(0,55);
+    wait(10ms);
+    key(use);
+    wait(200ms);
+
+    //South
+    look(180,55);
+    wait(10ms);
+    key(use);
+    wait(200ms);
+
+    //Button
+    wait(400ms);
+    look(0,90);
+    key(use);
+    wait(40t);
+    key(use);
+    wait(46t);
+loop();
+
+}$$
