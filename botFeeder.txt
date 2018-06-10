@@ -1,7 +1,0 @@
-ECHO(/g r-iii Starting botFeeder);
-if(%HUNGER% < 17)
-    do();
-        slot(9);
-        key(use);
-        until(%HUNGER% > 19);
-    endif();
