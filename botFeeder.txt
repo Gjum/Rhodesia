@@ -1,7 +1,7 @@
+ECHO(/g r-iii iM EaTiNg DaMnIt);
 if(%HUNGER% < 17)
     do();
         slot(9);
         key(use);
         until(%HUNGER% > 19);
     endif();
-LOG(testing);
