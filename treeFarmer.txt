@@ -1,0 +1,107 @@
+//Property of ICE Road Trucking Development
+
+//Chat message that bot has begun
+ECHO(/exit);
+wait(100ms);
+ECHO(/msg);
+wait(100ms);
+ECHO(/g R-III);
+wait(100ms);
+ECHO(TreeFarmer - Started | %DATETIME%);
+LOGTO(TreeFarmerLogs.txt, TreeFarmer - Started | %DATETIME%);
+
+#xdim = 28
+#zdim = 20
+slot(1);
+do(%#xdim%);
+    do(%#zdim%);
+        #z = %ZPOS% - 4
+
+        do();
+            look(0,90);
+            keydown(forward);
+            until(%#z% = %ZPOS%);
+        keyup(forward);
+        slot(1);
+        look(0,0);
+        do(10);
+            key(attack);
+        loop();
+        look(0,45);
+        do(20);
+            key(attack);
+        loop();
+        #z = %ZPOS% - 1
+    
+        do();
+            look(0,90);
+            keydown(forward);
+            until(%#z% = %ZPOS%);
+        keyup(forward);
+        look(0,270);
+        do(60);
+            key(attack);
+        loop();
+        look(0,90);
+        wait(20ms);
+        &sapling=pick(sapling:2);
+		wait(20ms);
+		//Check that there are saplings to place
+			if(%ITEM%==%&sapling%);
+				key(use);
+				wait(80ms);
+			else
+				ECHO(/exit);
+				wait(100ms);
+				ECHO(/msg);
+				wait(100ms);
+				ECHO(/g R-III);
+				wait(100ms);
+				ECHO(TreeFarmer - Ran out of saplings);
+				LOGTO(TreeFarmerLogs.txt, TreeFarmer - Ran out of saplings | %DATETIME%);
+				wait(60000ms);
+				ECHO(/logout);
+				wait(12000ms);
+			endif
+			
+        if(%HUNGER% < 17)
+            do();
+                slot(9);
+                key(use);
+                until(%HUNGER% > 19);
+            endif();
+		//Check Durability
+		slot(1);
+		if(%DURABILITY%<12);
+			ECHO(/exit);
+			wait(100ms);
+			ECHO(/msg);
+			wait(100ms);
+			ECHO(/g R-III);
+			wait(100ms);
+			ECHO(TreeFarmer - Durability forced logout);
+			LOGTO(TreeFarmerLogs.txt, TreeFarmer - Durability forced logout | %DATETIME%);
+			wait(60000ms);
+			ECHO(/logout);
+			wait(12000ms);
+		endif();
+    loop();
+    do(%#zdim%);
+        #z = %ZPOS% + 5
+
+        do()
+            look(0,90);
+            keydown(back);
+            until(%#z% = %ZPOS%);
+        keyup(back);
+    loop();
+    #x = %XPOS% + 5
+
+    do()
+        look(0,90);
+        keydown(right);
+        until(%#x% = %XPOS%);
+    keyup(right);
+loop();
+wait(60000ms);
+disconnect();
