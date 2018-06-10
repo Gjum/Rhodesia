@@ -4,3 +4,4 @@ if(%HUNGER% < 17)
         key(use);
         until(%HUNGER% > 19);
     endif();
+LOG(testing);
