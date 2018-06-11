@@ -1,119 +1,193 @@
-/*Pds0303
-*04/20/2018 | Last Edited 04/22/18
-*Dependencies: BotFeeder.txt | moveWest.txt | moveEast.txt | moveNorth.txt
-* Pickaxe: 50
-* Axe: 20
-* Efficiencies untested
-*/ This script harvests the Rhodesia melon farm on a loop until tool durability triggers disconnect (Use Silk Touch)
-do();
+// Setting to talk out-loud about status changes (chests full, need materials, etc.)
+//UNSET(@log_to_chat)
+//IF(@log_to_chat)
+//    ECHO("/wc BotMonitor [melon] Start at %DATETIME%")
+//ELSE
+//    LOG("&a[melon]&7 Start at %DATETIME%")
+//ENDIF
 
+//Log ingame and to text file
+ECHO(/exit);
+wait(100ms);
+ECHO(/msg);
+wait(100ms);
+ECHO(/g R-III);
+wait(100ms);
+ECHO(MelonFarmer - Started | %DATETIME%);
+LOGTO(MelonFarmerLogs.txt, STARTED | %DATETIME%);
 
-do(12)
-//Begin first row
-$$<botFeeder.txt>; //Check food at the end of every row
-slot(1);
-$$<moveWest.txt>;
-do(62);
-    look(90,15);
-    do(15); //Change this to adjust pick-axe speed
-        key(attack);
-    loop();
+#yaw_north = 360
+#yaw_east = 450
+#yaw_south = 180
+#yaw_west = 270
 
-    $$<moveEast.txt>;
-loop();
+// Ensure first check will always say block changed
+#pos_x = %XPOS% - 1
+#pos_z = %ZPOS% - 1
+
+UNSAFE(0)
+DO
+    // Generally hold diamond axe
+    PICK("diamond_axe")
+
+    // If durability is low, stop the script completely (If design constraints allow us to open chests, this could
+    // be expanded to open chests to get new tools)
+
+    IF((%ITEM% == "diamond_axe") && (%DURABILITY% <= 50))
+        KEYUP(forward)
+		//Log that durability has ended the script
+		ECHO(/exit);
+		wait(100ms);
+		ECHO(/msg);
+		wait(100ms);
+		ECHO(/g R-III);
+		wait(100ms);
+		ECHO(MelonFarmer - Durability forced logout);
+		LOGTO(MelonFarmerLogs.txt, Durability forced logout);
+		LOGTO(MelonFarmerLogs.txt, Logging out... | %DATETIME%);
+    ENDIF
+
+    // Has our block position changed?
+    IF((%#pos_x%!=%XPOS%)||(%#pos_z%!=%ZPOS%))
     
-    //Finishing row
-do(4);
-    $$<moveEast.txt>;
-loop();
-//Despense hotbar into water
-look(90,0);
-slot(2);
-do(64);
-    key(drop);
-    wait(3ms);
-loop();
-slot(3);
-do(64);
-    key(drop);
-    wait(3ms);
-loop();
-slot(4);
-do(64);
-    key(drop);
-    wait(3ms);
-loop();
-
-
-do(1);
-    $$<moveNorth.txt>;
-loop();
-//Check pick dura
-slot(1);
-    if(%DURABILITY% < 70);
-        disconnect();
-        wait(15000ms);
-    endif()
-
-
-//Begin second row
-$$<botFeeder.txt>;
-slot(1);
-
-$$<moveEast.txt>;
-do(62);
-    look(270,15);
-    do(15); //Change this to adjust pick-axe speed
-        key(attack);
-    loop();
-
-    $$<moveWest.txt>;
-loop();
+        // Reset movement timer
+        #movement_timer = 0
     
-    //Finishing second row
-do(4);
-#x = %XPOS% - 1
+        // Get block standing on
+        GETIDREL(0,-1,0,&standing_block)
+    
+        // Are we standing on cobblestone or stone brick stairs?
+        IF(%&standing_block% = "stone_brick_stairs")
+    
+            KEYUP(forward)
 
-do()
-    look(0,90);
-    keydown(left);
-    until(%#x% = %XPOS%);
-keyup(left);
+            // Either way, we visually inspect the tile to decode which direction to initially walk
+            LOOK(+0,90)
+            WAIT(1t)
+        
+            IF(%HIT_FACING% = "north")
+                LOOK(%#yaw_north%,%#default_pitch%)
+        
+            ELSEIF(%HIT_FACING% = "east")
+                LOOK(%#yaw_east%,%#default_pitch%)
+        
+            ELSEIF(%HIT_FACING% = "south")
+                LOOK(%#yaw_south%,%#default_pitch%)
+        
+            ELSEIF(%HIT_FACING% = "west")
+                LOOK(%#yaw_west%,%#default_pitch%)
+            ENDIF
 
+            $$<centerSelf.txt>
+        
+            KEYDOWN(forward)
+    
+        // Are we standing on birch stairs?
+        ELSEIF(%&standing_block% = "birch_stairs")
+    
+            // Look towards birch stairs direction
+            KEYUP(forward)
 
-    wait(10ms);
-loop();
-do(4);
-    #z = %ZPOS% - 1
+            $$<centerSelf.txt>
+            
+            LOOK(+0,90)
+            WAIT(1t)
+        
+            IF(%HIT_FACING% = "north")
+                LOOK(%#yaw_north%,%#default_pitch%)
+        
+            ELSEIF(%HIT_FACING% = "east")
+                LOOK(%#yaw_east%,%#default_pitch%)
+        
+            ELSEIF(%HIT_FACING% = "south")
+                LOOK(%#yaw_south%,%#default_pitch%)
+        
+            ELSEIF(%HIT_FACING% = "west")
+                LOOK(%#yaw_west%,%#default_pitch%)
+            ENDIF
 
-do()
-    look(0,90);
-    keydown(forward);
-    until(%#z% = %ZPOS%);
-keyup(forward);
+            WAIT(1t)
 
+            // Throw all melon items in inventory at 45 degree angle
+            // If we can't find a melon block in 1 second, assume our inventory is now empty
+            #melon_find_timer = 0
+            DO
+                LOOK(+0,315)
+                PICK("melon_block")
+                WAIT(1t)
 
-    wait(10ms);
-loop();
+                IF(%ITEM% != "melon_block")
+                    INC(#melon_find_timer)
+                ELSE
+                    #melon_find_timer = 0
+                    KEY(drop)
+                ENDIF
 
+                $$<snapYaw.txt>
+            UNTIL(%#melon_find_timer% >= 20)
+        ENDIF
 
-//Check pick dura
-slot(1);
-    if(%DURABILITY% < 70);
-        disconnect();
-        wait(15000ms);
-    endif()
+        // Only save position when we actually have executed a new block
+        #pos_x = %XPOS%
+        #pos_z = %ZPOS%
 
-loop();
+    ENDIF
 
-do(60);
-    #z = %ZPOS% + 1
+    // Unconditionally, if we are facing a melon, attack it (regardless of what else we do)
+    IF(%DIRECTION% = "N")
+        #block_x[0] = (%XPOS% + 0)
+        #block_y[0] = (%YPOS% + 0)
+        #block_z[0] = (%ZPOS% - 1)
+        #block_yaw[0] = 359
+        #block_pitch[0] = 48
+    ELSEIF(%DIRECTION% = "E")
+        #block_x[0] = (%XPOS% + 1)
+        #block_y[0] = (%YPOS% + 0)
+        #block_z[0] = (%ZPOS% + 0)
+        #block_yaw[0] = 449
+        #block_pitch[0] = 48
+    ELSEIF(%DIRECTION% = "S")
+        #block_x[0] = (%XPOS% + 0)
+        #block_y[0] = (%YPOS% + 0)
+        #block_z[0] = (%ZPOS% + 1)
+        #block_yaw[0] = 539
+        #block_pitch[0] = 48
+    ELSEIF(%DIRECTION% = "W")
+        #block_x[0] = (%XPOS% - 1)
+        #block_y[0] = (%YPOS% + 0)
+        #block_z[0] = (%ZPOS% + 0)
+        #block_yaw[0] = 269
+        #block_pitch[0] = 48
+    ENDIF
 
-do()
-    look(0,90);
-    keydown(back);
-    until(%#z% = %ZPOS%);
-keyup(back);
-loop();
+    GETID(%#block_x[0]%,%#block_y[0]%,%#block_z[0]%,&id)
 
-loop();
+    IF(%&id% == "melon_block")
+        LOOK(%#block_yaw[0]%,%#block_pitch[0]%)
+        KEY(attack)
+    ENDIF
+
+    // Walk
+    KEYDOWN(forward)
+    
+    // Increment movement timer
+    INC(#movement_timer)
+    
+    // Has our position changed in the past 60 seconds? (excluding external scripts)
+    IF(%#movement_timer%>1200)
+        // Rotate 90 degrees clockwise, if we seem to be stuck
+        LOOKS(+90,%#default_pitch%,.2)
+    ENDIF
+
+    if(%HUNGER% < 17)
+    do();
+        slot(9);
+        key(use);
+        until(%HUNGER% > 19);
+    endif();
+
+    $$<snapYaw.txt>
+
+    WAIT(1t)
+LOOP
+ENDUNSAFE
