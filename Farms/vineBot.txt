@@ -1,12 +1,13 @@
 
 // Setting to talk out-loud about status changes (chests full, need materials, etc.)
-UNSET(@log_to_chat)
-
-IF(@log_to_chat)
-    ECHO("/wc BotMonitor [vine] Start at %DATETIME%")
-ELSE
-    LOG("&a[vine]&7 Start at %DATETIME%")
-ENDIF
+ECHO(/exit);
+wait(100ms);
+ECHO(/msg);
+wait(100ms);
+ECHO(/g R-Bots);
+wait(100ms);
+ECHO(VineFarm - Started | %DATETIME%);
+LOGTO(VineFarmerLogs.txt, STARTED | %DATETIME%);
 
 #yaw_north = 360
 #yaw_east = 450
@@ -142,14 +143,18 @@ DO
                 PICK("shears")
                 WAIT(1t)
             UNTIL(%ITEM% == "shears")
-
+            
             IF(%ITEM% != "shears")
-                IF(@log_to_chat)
-                    ECHO("/wc BotMonitor [vine] Out of shears at %DATETIME%")
-                ELSE
-                    LOG("&a[vine]&7 Out of shears at %DATETIME%")
-                ENDIF
-                STOP
+                ECHO(/exit);
+                wait(100ms);
+                ECHO(/msg);
+                wait(100ms);
+                ECHO(/g R-III);
+                wait(100ms);
+                ECHO(VineFarm - No shears);
+                LOGTO(VineFarmerLogs.txt, No shears | %DATETIME%);
+                disconnect();
+                wait(12000ms);
             ENDIF
         ENDIF
 
@@ -169,7 +174,13 @@ DO
 
     prev_done = done
 
-    $$<eatFood.txt>
+    if(%HUNGER% < 17)
+            do();
+                slot(9);
+                key(use);
+            until(%HUNGER% > 19);
+    endif();
+    
     $$<snapYaw.txt>
     $$<centerSelf.txt>
 
